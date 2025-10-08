@@ -19,7 +19,6 @@ import argparse
 import sys
 
 # Configuration
-BLOG_URL = "https://neurohackingly.com"
 MAX_WORKERS = 10
 DOWNLOAD_TIMEOUT = 30
 CHUNK_SIZE = 8192
@@ -44,9 +43,13 @@ def resolve_ghost_url(url, blog_url):
     return url
 
 
-def parse_ghost_export(file_path):
+def parse_ghost_export(file_path, blog_url):
     """
     Parse Ghost JSON export and extract media URLs for each published post.
+
+    Args:
+        file_path: Path to Ghost JSON export file
+        blog_url: Blog URL for resolving __GHOST_URL__ placeholders
 
     Returns:
         dict: {slug: [media_urls]}
@@ -77,8 +80,8 @@ def parse_ghost_export(file_path):
 
         # 1. Extract feature image
         if feature_image := post.get('feature_image'):
-            resolved_url = resolve_ghost_url(feature_image, BLOG_URL)
-            media_urls.add(urljoin(BLOG_URL, resolved_url))
+            resolved_url = resolve_ghost_url(feature_image, blog_url)
+            media_urls.add(urljoin(blog_url, resolved_url))
 
         # 2. Parse HTML content for embedded media
         html_content = post.get('html')
@@ -89,18 +92,18 @@ def parse_ghost_export(file_path):
             for img in soup.find_all('img'):
                 if src := img.get('src'):
                     # Resolve __GHOST_URL__ placeholder and convert to absolute
-                    resolved_url = resolve_ghost_url(src, BLOG_URL)
-                    media_urls.add(urljoin(BLOG_URL, resolved_url))
+                    resolved_url = resolve_ghost_url(src, blog_url)
+                    media_urls.add(urljoin(blog_url, resolved_url))
 
             # Extract videos and their sources
             for video in soup.find_all('video'):
                 if src := video.get('src'):
-                    resolved_url = resolve_ghost_url(src, BLOG_URL)
-                    media_urls.add(urljoin(BLOG_URL, resolved_url))
+                    resolved_url = resolve_ghost_url(src, blog_url)
+                    media_urls.add(urljoin(blog_url, resolved_url))
                 for source in video.find_all('source'):
                     if src := source.get('src'):
-                        resolved_url = resolve_ghost_url(src, BLOG_URL)
-                        media_urls.add(urljoin(BLOG_URL, resolved_url))
+                        resolved_url = resolve_ghost_url(src, blog_url)
+                        media_urls.add(urljoin(blog_url, resolved_url))
 
         urls_by_slug[slug] = list(media_urls)
 
@@ -223,10 +226,6 @@ def main():
 
     args = parser.parse_args()
 
-    # Update global BLOG_URL with provided value
-    global BLOG_URL
-    BLOG_URL = args.blog_url
-
     # Validate input file
     if not os.path.exists(args.json_file):
         print(f"❌ Error: File not found: {args.json_file}")
@@ -234,7 +233,7 @@ def main():
 
     try:
         # Parse JSON export
-        urls_by_slug = parse_ghost_export(args.json_file)
+        urls_by_slug = parse_ghost_export(args.json_file, args.blog_url)
 
         if not urls_by_slug:
             print("⚠️  No published posts found with media")

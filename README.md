@@ -21,9 +21,9 @@ Extract all images and videos from a Ghost blog JSON export file. Perfect for mi
 
 | Aspect | Web Scraping | JSON Export |
 |--------|--------------|-------------|
-| **API Credits** | 140+ (Firecrawl) | 0 (free!) |
-| **Reliability** | ~95% | 100% |
-| **Speed** | Network-bound | Instant parsing |
+| **Cost** | API credits required | Free (offline) |
+| **Reliability** | May miss content | 100% complete |
+| **Speed** | Network-dependent | Instant parsing |
 | **Risk** | May miss JS-rendered images | Zero risk |
 
 ## Installation
@@ -106,16 +106,10 @@ Each post gets its own directory named by slug, containing all media from that p
 - `beautifulsoup4`
 - `requests`
 
-## Comparison with Firecrawl Approach
-
-This repo focuses on **JSON export parsing** (simple, free, reliable).
-
-For **web scraping** approach using Firecrawl, see: [ghost-produktiv-me-images](https://github.com/codeme-ne/ghost-produktiv-me-images)
-
 ## License
 
 MIT
 
 ## Author
 
-Built for migrating neurohackingly.com from Ghost(Pro) to self-hosted.
+Created by [Lukas Zangerl](https://github.com/codeme-ne) for Ghost blog migrations.
