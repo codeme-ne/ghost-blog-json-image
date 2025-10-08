@@ -12,7 +12,7 @@ Extract all images and videos from a Ghost blog JSON export file. Perfect for mi
 - ✅ Automatic resume (skips existing files)
 - ✅ Handles feature images + embedded media
 - ✅ Supports images and videos
-- ✅ Resolves relative URLs automatically
+- ✅ Resolves `__GHOST_URL__` placeholders and relative URLs automatically
 
 ## Why This Over Web Scraping?
 
@@ -37,18 +37,17 @@ In Ghost Admin → Settings → Labs → Export your content
 
 ### 2. Extract media
 
+**Important:** You must provide your blog URL with `--blog-url`. Ghost exports use `__GHOST_URL__` as a placeholder that needs to be replaced with your actual blog domain.
+
 ```bash
 # Dry run (see what would be downloaded)
-python extract_media.py ghost-export.json --dry-run
+python extract_media.py ghost-export.json --blog-url https://yourblog.com --dry-run
 
 # Download all media
-python extract_media.py ghost-export.json
+python extract_media.py ghost-export.json --blog-url https://yourblog.com
 
 # Custom output directory
-python extract_media.py ghost-export.json --output my-media
-
-# Different blog URL (for relative path resolution)
-python extract_media.py ghost-export.json --blog-url https://myblog.com
+python extract_media.py ghost-export.json --blog-url https://yourblog.com --output my-media
 ```
 
 ## Output Structure
@@ -83,6 +82,7 @@ Each post gets its own directory named by slug, containing all media from that p
    - Extracts `feature_image` URL
    - Parses `html` field with BeautifulSoup
    - Finds all `<img>`, `<video>`, `<source>` tags
+   - Replaces `__GHOST_URL__` placeholder with your blog URL
    - Resolves relative URLs to absolute
 4. Downloads media in parallel (10 workers)
 5. Organizes by post slug

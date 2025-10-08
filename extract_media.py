@@ -25,6 +25,25 @@ DOWNLOAD_TIMEOUT = 30
 CHUNK_SIZE = 8192
 
 
+def resolve_ghost_url(url, blog_url):
+    """
+    Replace Ghost's __GHOST_URL__ placeholder with actual blog URL.
+
+    Ghost JSON exports use __GHOST_URL__ as a placeholder that needs
+    to be replaced with the actual blog domain.
+
+    Args:
+        url: URL that may contain __GHOST_URL__ placeholder
+        blog_url: Actual blog URL to use as replacement
+
+    Returns:
+        str: URL with __GHOST_URL__ replaced
+    """
+    if url and '__GHOST_URL__' in url:
+        return url.replace('__GHOST_URL__', blog_url)
+    return url
+
+
 def parse_ghost_export(file_path):
     """
     Parse Ghost JSON export and extract media URLs for each published post.
@@ -58,7 +77,8 @@ def parse_ghost_export(file_path):
 
         # 1. Extract feature image
         if feature_image := post.get('feature_image'):
-            media_urls.add(feature_image)
+            resolved_url = resolve_ghost_url(feature_image, BLOG_URL)
+            media_urls.add(urljoin(BLOG_URL, resolved_url))
 
         # 2. Parse HTML content for embedded media
         html_content = post.get('html')
@@ -68,16 +88,19 @@ def parse_ghost_export(file_path):
             # Extract images
             for img in soup.find_all('img'):
                 if src := img.get('src'):
-                    # Convert relative URLs to absolute
-                    media_urls.add(urljoin(BLOG_URL, src))
+                    # Resolve __GHOST_URL__ placeholder and convert to absolute
+                    resolved_url = resolve_ghost_url(src, BLOG_URL)
+                    media_urls.add(urljoin(BLOG_URL, resolved_url))
 
             # Extract videos and their sources
             for video in soup.find_all('video'):
                 if src := video.get('src'):
-                    media_urls.add(urljoin(BLOG_URL, src))
+                    resolved_url = resolve_ghost_url(src, BLOG_URL)
+                    media_urls.add(urljoin(BLOG_URL, resolved_url))
                 for source in video.find_all('source'):
                     if src := source.get('src'):
-                        media_urls.add(urljoin(BLOG_URL, src))
+                        resolved_url = resolve_ghost_url(src, BLOG_URL)
+                        media_urls.add(urljoin(BLOG_URL, resolved_url))
 
         urls_by_slug[slug] = list(media_urls)
 
@@ -194,8 +217,8 @@ def main():
     )
     parser.add_argument(
         '--blog-url',
-        default='https://neurohackingly.com',
-        help='Blog URL for resolving relative paths (default: https://neurohackingly.com)'
+        required=True,
+        help='Your blog URL (e.g., https://yourblog.com) - required for resolving __GHOST_URL__ placeholders and relative paths'
     )
 
     args = parser.parse_args()
