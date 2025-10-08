@@ -30,3 +30,13 @@ Thumbs.db
 
 # Environment
 .env
+
+# Ghost export files (user data)
+*-ghost-export.json
+*.ghost-export.json
+
+# Serena MCP configuration
+.serena/
+
+# Claude Code
+.claude/
