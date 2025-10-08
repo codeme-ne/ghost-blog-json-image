@@ -1,5 +1,8 @@
 # Ghost JSON Export Media Extractor
 
+![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 Extract all images and videos from a Ghost blog JSON export file. Perfect for migrating from Ghost(Pro) to self-hosted.
 
 **Zero web scraping. Zero API credits. 100% reliable.**
@@ -28,6 +31,16 @@ Extract all images and videos from a Ghost blog JSON export file. Perfect for mi
 ```bash
 pip install -r requirements.txt
 ```
+
+## Quick Test
+
+Test the script with the included sample export:
+
+```bash
+python extract_media.py examples/ghost-export-sample.json --blog-url https://example-blog.com --dry-run
+```
+
+This sample demonstrates the `__GHOST_URL__` placeholder resolution.
 
 ## Usage
 

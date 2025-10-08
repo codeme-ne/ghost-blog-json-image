@@ -1,0 +1,46 @@
+{
+  "db": [
+    {
+      "data": {
+        "posts": [
+          {
+            "id": "1",
+            "title": "Getting Started with Ghost",
+            "slug": "getting-started",
+            "status": "published",
+            "type": "post",
+            "feature_image": "__GHOST_URL__/content/images/2024/01/welcome-banner.jpg",
+            "html": "<p>Welcome to my blog! Here's what you'll learn:</p><img src=\"__GHOST_URL__/content/images/2024/01/roadmap.png\" alt=\"Learning roadmap\"><p>Let's get started!</p>"
+          },
+          {
+            "id": "2",
+            "title": "Video Tutorial: Setup Guide",
+            "slug": "setup-guide",
+            "status": "published",
+            "type": "post",
+            "feature_image": "https://images.unsplash.com/photo-1234567890?w=2000",
+            "html": "<p>Watch this tutorial:</p><video controls><source src=\"__GHOST_URL__/content/media/2024/01/tutorial.mp4\" type=\"video/mp4\"></video><p>Additional resources: <img src=\"https://example.com/external-diagram.png\" alt=\"Diagram\"></p>"
+          },
+          {
+            "id": "3",
+            "title": "About Me",
+            "slug": "about",
+            "status": "published",
+            "type": "page",
+            "feature_image": "__GHOST_URL__/content/images/2024/01/profile-photo.jpg",
+            "html": "<h1>About Me</h1><p>Hi! I'm a blogger.</p><img src=\"__GHOST_URL__/content/images/2024/01/bio-image.jpg\" alt=\"My story\">"
+          },
+          {
+            "id": "4",
+            "title": "Draft Article",
+            "slug": "draft-article",
+            "status": "draft",
+            "type": "post",
+            "feature_image": "__GHOST_URL__/content/images/2024/01/draft-image.jpg",
+            "html": "<p>This draft should NOT be extracted!</p>"
+          }
+        ]
+      }
+    }
+  ]
+}
